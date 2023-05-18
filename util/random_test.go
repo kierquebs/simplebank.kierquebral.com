@@ -19,3 +19,12 @@ func TestRandomMonet(t *testing.T) {
 	require.NotZero(t, money)
 
 }
+
+func TestRandomCurrency(t *testing.T) {
+
+	curr := RandomCurrency()
+	currencies := []string{"EUR", "USD", "CAD"}
+
+	require.Contains(t, currencies, curr)
+
+}
