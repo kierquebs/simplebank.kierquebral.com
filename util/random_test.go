@@ -7,7 +7,15 @@ import (
 )
 
 func TestRandomOwner(t *testing.T) {
-	owner := RandomOwner()
 
+	owner := RandomOwner()
 	require.Len(t, owner, 6)
+
+}
+
+func TestRandomMonet(t *testing.T) {
+
+	money := RandomMoney()
+	require.NotZero(t, money)
+
 }
