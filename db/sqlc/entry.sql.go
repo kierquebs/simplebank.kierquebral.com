@@ -35,13 +35,13 @@ func (q *Queries) CreateEntry(ctx context.Context, arg CreateEntryParams) (Entry
 	return i, err
 }
 
-const deleteEntries = `-- name: DeleteEntries :exec
+const deleteEntry = `-- name: DeleteEntry :exec
 DELETE FROM entries
 WHERE id = $1
 `
 
-func (q *Queries) DeleteEntries(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deleteEntries, id)
+func (q *Queries) DeleteEntry(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteEntry, id)
 	return err
 }
 
@@ -102,20 +102,20 @@ func (q *Queries) ListEntries(ctx context.Context, arg ListEntriesParams) ([]Ent
 	return items, nil
 }
 
-const updateEntries = `-- name: UpdateEntries :one
+const updateEntry = `-- name: UpdateEntry :one
 UPDATE entries
 SET amount = $2
 WHERE id = $1
 RETURNING id, account_id, amount, created_at
 `
 
-type UpdateEntriesParams struct {
+type UpdateEntryParams struct {
 	ID     int64 `json:"id"`
 	Amount int64 `json:"amount"`
 }
 
-func (q *Queries) UpdateEntries(ctx context.Context, arg UpdateEntriesParams) (Entry, error) {
-	row := q.db.QueryRowContext(ctx, updateEntries, arg.ID, arg.Amount)
+func (q *Queries) UpdateEntry(ctx context.Context, arg UpdateEntryParams) (Entry, error) {
+	row := q.db.QueryRowContext(ctx, updateEntry, arg.ID, arg.Amount)
 	var i Entry
 	err := row.Scan(
 		&i.ID,
