@@ -58,7 +58,7 @@ func TestUpdateEntry(t *testing.T) {
 
 	require.Equal(t, entry1.ID, entry2.ID)
 	require.Equal(t, entry1.AccountID, entry2.AccountID)
-	require.NotEqual(t, entry1.Amount, entry2.Amount)
+	require.Equal(t, arg.Amount, entry2.Amount)
 	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second)
 }
 
