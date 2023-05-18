@@ -52,7 +52,7 @@ func TestGetTransfer(t *testing.T) {
 	require.WithinDuration(t, transfer1.CreatedAt, transfer2.CreatedAt, time.Second)
 }
 
-func TestListTransfer(t *testing.T) {
+func TestListTransfers(t *testing.T) {
 	account1 := createRandomAccount(t)
 	account2 := createRandomAccount(t)
 
