@@ -10,12 +10,12 @@ import (
 )
 
 type createUserRequest struct {
-	Username       string `json:"username" binding:"required,min=6,max=8"`
-	HashedPassword string `json:"hashed_password" binding:"required,min=6,max=8"`
-	FirstName      string `json:"first_name" binding:"required,min=3"`
-	MiddleName     string `json:"middle_name" binding:"required,min=3"`
-	LastName       string `json:"last_name" binding:"required,min=3"`
-	Email          string `json:"email" binding:"required"`
+	Username   string `json:"username" binding:"required,min=6,max=8,alphanum"`
+	Password   string `json:"password" binding:"required,min=6,max=8"`
+	FirstName  string `json:"first_name" binding:"required,min=3"`
+	MiddleName string `json:"middle_name" binding:"required,min=3"`
+	LastName   string `json:"last_name" binding:"required,min=3"`
+	Email      string `json:"email" binding:"required"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
@@ -25,7 +25,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
-	hashedpassword, err := util.HashPassword(req.HashedPassword)
+	hashedpassword, err := util.HashPassword(req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
