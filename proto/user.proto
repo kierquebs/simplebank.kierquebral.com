@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/kierquebs/simplebank.kierquebral.com/pb";
+
+message User {
+    string username  = 1;
+    string first_name = 2;
+    string middle_name = 3;
+    string last_name = 4;
+    string email = 5;
+    google.protobuf.Timestamp password_changed_at = 6;
+    google.protobuf.Timestamp created_at = 7;
+}
+
+
+
