@@ -1,0 +1,27 @@
+ // See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+   
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "echo Hello"
+        },
+        {
+            "label": "gpom --autostash",
+            "detail": "runs git pull origin master --rebase --autostash",
+            "type": "shell",
+            "command": "git pull origin master --rebase --autostash",
+            "presentation": {
+                "clear": true
+            },
+            "options": {
+                "statusbar": {
+                "hide": true
+                }
+            }
+        }
+    ]
+}
