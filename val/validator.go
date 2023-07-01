@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/mail"
 	"regexp"
+
+	"github.com/kierquebs/simplebank.kierquebral.com/util"
 )
 
 var (
@@ -57,4 +59,11 @@ func ValidateName(value string) error {
 
 func ValidateSecretCode(value string) error {
 	return ValidateString(value, 32, 128)
+}
+
+func ValidateCurrency(value string) error {
+	if !util.IsSupportedCurrency(value) {
+		return fmt.Errorf("invalid currency")
+	}
+	return nil
 }
