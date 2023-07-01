@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb;
+
+import "account.proto";
+
+option go_package = "github.com/kierquebs/simplebank.kierquebral.com/pb";
+
+message CreateAccountRequest {
+    string currency  = 1;
+}
+
+message CreateAccountResponse {
+    Account account = 1;
+}
+
+
+
+
+
