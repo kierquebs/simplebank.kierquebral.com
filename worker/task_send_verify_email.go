@@ -48,6 +48,7 @@ func (processor *RedisTaskProcessor) ProcessTaskSendVerifyEmail(ctx context.Cont
 		if err == sql.ErrNoRows {
 			return fmt.Errorf("failed to get user: %w", err)
 		}
+		return err
 	}
 
 	log.Info().Str("type", task.Type()).Bytes("payload", task.Payload()).
