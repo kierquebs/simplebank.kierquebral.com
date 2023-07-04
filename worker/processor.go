@@ -3,7 +3,6 @@ package worker
 import (
 	"context"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/hibiken/asynq"
 	db "github.com/kierquebs/simplebank.kierquebral.com/db/sqlc"
 	"github.com/rs/zerolog/log"
@@ -25,8 +24,6 @@ type RedisTaskProcessor struct {
 }
 
 func NewRedisTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) TaskProcessor {
-	logger := NewLogger()
-	redis.SetLogger(logger)
 
 	server := asynq.NewServer(
 		redisOpt,
@@ -38,8 +35,15 @@ func NewRedisTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) TaskPr
 			ErrorHandler: asynq.ErrorHandlerFunc(func(ctx context.Context, task *asynq.Task, err error) {
 				log.Error().Err(err).Str("type", task.Type()).
 					Bytes("payload", task.Payload()).Msg("process task failed")
+
+				retried, _ := asynq.GetRetryCount(ctx)
+				maxRetry, _ := asynq.GetMaxRetry(ctx)
+				if retried >= maxRetry {
+					log.Error().Err(err).Str("type", task.Type()).
+						Bytes("payload", task.Payload()).Msg("retry exhausted")
+				}
 			}),
-			Logger: logger,
+			Logger: NewLogger(),
 		},
 	)
 

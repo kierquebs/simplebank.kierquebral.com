@@ -54,8 +54,8 @@ func main() {
 	taskDistrbutor := worker.NewRedisTaskDistributor(redisOpt)
 
 	go runTaskProcessor(redisOpt, store)
-	go runGRPCServer(config, store, taskDistrbutor)
-	runGatewayServer(config, store, taskDistrbutor)
+	go runGatewayServer(config, store, taskDistrbutor)
+	runGRPCServer(config, store, taskDistrbutor)
 
 }
 
