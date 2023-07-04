@@ -16,6 +16,7 @@ import (
 	db "github.com/kierquebs/simplebank.kierquebral.com/db/sqlc"
 	_ "github.com/kierquebs/simplebank.kierquebral.com/doc/statik"
 	"github.com/kierquebs/simplebank.kierquebral.com/gapi"
+	"github.com/kierquebs/simplebank.kierquebral.com/mail"
 	"github.com/kierquebs/simplebank.kierquebral.com/pb"
 	"github.com/kierquebs/simplebank.kierquebral.com/util"
 	"github.com/kierquebs/simplebank.kierquebral.com/worker"
@@ -53,7 +54,7 @@ func main() {
 	}
 	taskDistrbutor := worker.NewRedisTaskDistributor(redisOpt)
 
-	go runTaskProcessor(redisOpt, store)
+	go runTaskProcessor(config, redisOpt, store)
 	go runGatewayServer(config, store, taskDistrbutor)
 	runGRPCServer(config, store, taskDistrbutor)
 
@@ -71,8 +72,9 @@ func runDBMigration(migrationURL, dbSource string) {
 	log.Info().Msg("db migrated successfully")
 }
 
-func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store)
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
+	mailer := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 	log.Info().Msg("start task processor")
 	err := taskProcessor.Start()
 	if err != nil {
